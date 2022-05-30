@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { mathematicsDatabase } from '../../util/database';
+import { getMathematic } from '../../util/database';
 
 export default function Mathematic(props) {
   if (!props.mathematic) {
@@ -22,19 +21,19 @@ export default function Mathematic(props) {
   return (
     <div>
       <Head>
-        <title>{props.mathematic.name}</title>
+        <title>{props.mathematic.firstName}</title>
         <meta
           name="description"
-          content={`${props.mathematic.name} is a ${props.mathematic.type}`}
+          content={`${props.mathematic.firstName} is a ${props.mathematic.type}`}
         />
       </Head>
 
-      <h1>{props.mathematic.name}</h1>
+      <h1>{props.mathematic.firstName}</h1>
 
       <div>
         <div>
           <div>
-            <Image src={`/${props.animal.id}.jpeg`} width="400" height={300} />
+            {/* <Image src={`/${props.animal.id}.jpeg`} width="400" height={300} /> */}
           </div>
           <div>id: {props.mathematic.id}</div>
           <div>fun: {props.mathematic.fun}</div>
@@ -44,22 +43,23 @@ export default function Mathematic(props) {
   );
 }
 
-export function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   // console.log(context.query);
-  const foundMathematic = mathematicsDatabase.find((mathematic) => {
-    // This comes from the URL, and its name
-    // is based on the filename [animalId].js
-    return mathematic.id === context.query.mathematicId;
-  });
+  // const foundMathematic = mathematicsDatabase.find((mathematic) => {
+  // This comes from the URL, and its name
+  // is based on the filename [animalId].js
+  // return mathematic.id === context.query.mathematicId;
+  //  });
 
-  if (!foundMathematic) {
-    context.res.statusCode = 404;
-  }
+  // if (!foundMathematic) {
+  // context.res.statusCode = 404;
+  // }
+  const mathematic = await getMathematic(context.query.mathematicId);
 
   return {
     props: {
       // mathematicId: context.query.mathematicId,
-      mathematic: foundMathematic || null,
+      mathematic: mathematic,
     },
   };
 }

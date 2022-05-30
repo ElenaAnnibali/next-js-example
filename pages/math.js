@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Layout from '../components/Layout.js';
-import { mathematicsDatabase } from '../util/database';
+import { getMathematics } from '../util/database';
 
 const mathsListStyles = css`
   background: #dfd;
@@ -22,34 +21,31 @@ const mathsListItemStyles = css`
 export default function Mathematics(props) {
   return (
     <div>
-      <Layout>
-        <Head>
-          <title>Mathematics</title>
-          <meta
-            mame="description"
-            content="List of various mathematical operations"
-          />
-        </Head>
-        <h1>Mathematical Operations</h1>
+      <Head>
+        <title>Mathematics</title>
+        <meta
+          mame="description"
+          content="List of various mathematical operations"
+        />
+      </Head>
+      <h1>Mathematical Operations</h1>
 
-        <div css={mathsListStyles}>
-          {props.mathematics.map((mathematic) => {
-            return (
-              <div
-                css={mathsListItemStyles}
-                key={`mathematic-${mathematic.key}`}
-              >
-                <div>
-                  name: {/* <Link href={`/mathematics/${mathematic.id}`}  /> */}
-                  {mathematic.name}
-                </div>
-                <div>type: {mathematic.type}</div>
-                <div>fun: {mathematic.fun}</div>
+      <div css={mathsListStyles}>
+        {props.mathematics.map((mathematic) => {
+          return (
+            <div css={mathsListItemStyles} key={`mathematic-${mathematic.id}`}>
+              <div>
+                name:{' '}
+                <Link href={`/mathematics/${mathematic.id}`}>
+                  {mathematic.firstName}
+                </Link>
               </div>
-            );
-          })}
-        </div>
-      </Layout>
+              <div>type: {mathematic.type}</div>
+              <div>fun: {mathematic.fun}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -58,7 +54,8 @@ export default function Mathematics(props) {
 // node.js (on the server)
 
 // important: this works only in the /page directory
-export function getServerSideProps() {
+export async function getServerSideProps() {
+  const mathematics = await getMathematics();
   // console.log(mathematicsDatabase)
   return {
     // anything that you pass in the props object
@@ -66,7 +63,7 @@ export function getServerSideProps() {
     // in the props parameter
 
     props: {
-      mathematics: mathematicsDatabase,
+      mathematics: mathematics,
     },
   };
 }

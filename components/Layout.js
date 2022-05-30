@@ -3,7 +3,6 @@ import Footer from './Footer';
 import Header from './Header';
 
 const divStyles = css`
-  background: url('/smaller-version.png');
   padding: 0 200px 500px 200px;
 `;
 
