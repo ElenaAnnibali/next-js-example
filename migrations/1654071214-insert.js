@@ -1,27 +1,23 @@
-export const fruits = [
+const fruits = [
   {
-    id: '1',
     name: 'papaya',
     color: 'green',
     ripeness: 10,
     icon: '🫒',
   },
   {
-    id: '2',
     name: 'apple',
     color: 'red',
     ripeness: 4,
     icon: '🍎',
   },
   {
-    id: '3',
     name: 'lemon',
     color: 'yellow',
     ripeness: 1,
     icon: '🍋',
   },
   {
-    id: '4',
     name: 'banana',
     color: 'yellow',
     ripeness: 7,

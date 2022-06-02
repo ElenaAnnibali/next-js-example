@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getMathematics } from '../util/database';
+import { getMathematics, Mathematic } from '../util/database';
 
 const mathsListStyles = css`
   background: #dfd;
@@ -18,13 +18,17 @@ const mathsListItemStyles = css`
   }
 `;
 
-export default function Mathematics(props) {
+type Props = {
+  mathematics: Mathematic[];
+};
+
+export default function Mathematics(props: Props) {
   return (
     <div>
       <Head>
         <title>Mathematics</title>
         <meta
-          mame="description"
+          // mame="description"
           content="List of various mathematical operations"
         />
       </Head>

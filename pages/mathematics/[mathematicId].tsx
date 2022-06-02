@@ -1,7 +1,13 @@
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { getMathematic } from '../../util/database';
+import { getMathematicById, Mathematic } from '../../util/database';
+import { queryParamToNumber } from '../../util/queryParams';
 
-export default function Mathematic(props) {
+type Props = {
+  mathematic: Mathematic | null;
+};
+
+export default function SingleMathematic(props: Props) {
   if (!props.mathematic) {
     return (
       <div>
@@ -43,7 +49,7 @@ export default function Mathematic(props) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   // console.log(context.query);
   // const foundMathematic = mathematicsDatabase.find((mathematic) => {
   // This comes from the URL, and its name
@@ -54,12 +60,14 @@ export async function getServerSideProps(context) {
   // if (!foundMathematic) {
   // context.res.statusCode = 404;
   // }
-  const mathematic = await getMathematic(context.query.mathematicId);
+
+  const mathematicId = queryParamToNumber(context.query.mathematicId);
+  const mathematic = await getMathematicById(mathematicId);
 
   return {
     props: {
       // mathematicId: context.query.mathematicId,
-      mathematic: mathematic,
+      mathematic: mathematic || null,
     },
   };
 }

@@ -12,6 +12,11 @@ config();
 
 // Connect only once to the database
 // https://github.com/vercel/next.js/issues/7811#issuecomment-715259370
+
+declare module globalThis {
+  let postgresSqlClient: ReturnType<typeof postgres> | undefined;
+}
+
 function connectOneTimeToDatabase() {
   if (!globalThis.postgresSqlClient) {
     globalThis.postgresSqlClient = postgres();
@@ -23,20 +28,69 @@ function connectOneTimeToDatabase() {
 // Connect to PostgreSQL
 const sql = connectOneTimeToDatabase();
 
+export type Mathematic = {
+  id: number;
+  firstName: string;
+  type: string;
+  fun: string;
+};
+
 export async function getMathematics() {
-  const mathematics = await sql`
+  const mathematics = await sql<Mathematic[]>`
     SELECT * FROM mathematics;
   `;
   return mathematics.map((mathematic) => camelcaseKeys(mathematic));
 }
 
-export async function getMathematic(id) {
-  const [mathematic] =
-    await sql`  /* sql is async. if you run this query we will ge a promise, for this reason we need to await */
+export async function getMathematicById(id?: number) {
+  if (!id) return undefined;
+  const [mathematic] = await sql<
+    [Mathematic | undefined]
+  >`  /* sql is async. if you run this query we will ge a promise, for this reason we need to await */
   SELECT * FROM mathematics
   WHERE id = ${id}
 `;
-  return camelcaseKeys(mathematic);
+  return mathematic && camelcaseKeys(mathematic);
+}
+
+export async function getFruits() {
+  const fruits = await sql`
+    SELECT * FROM fruits
+  `;
+  return fruits.map((fruit) => camelcaseKeys(fruit));
+}
+
+export async function getFruitById(id: number) {
+  const [fruit] = await sql`
+    SELECT
+      *
+    FROM
+      fruits
+    WHERE
+      id = ${id}
+  `;
+  return camelcaseKeys(fruit);
+}
+
+export async function getFruitWithInsectsById(fruitId: number) {
+  const fruitsWithInsects = await sql`
+    SELECT
+      fruits.id AS fruit_id,
+      fruits.name AS fruit_name,
+      fruits.icon AS animal_icon,
+      insects.id AS insect_id,
+      insects.name AS insect_name
+    FROM
+      fruits,
+      fruits_insects,
+      insects
+    WHERE
+      fruits.id = ${fruitId} AND
+      fruits_insects.fruit_id = fruits.id AND
+      insects.id = fruits_insects.insect_id
+
+  `;
+  return camelcaseKeys(fruitsWithInsects);
 }
 
 /* export const mathematicsDatabase = [
