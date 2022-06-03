@@ -22,3 +22,11 @@ export function setStringifiedCookie(key: string, value: FruitInDiet[]) {
 const exampleValue = [{ id: '1', eatCounter: 0 }];
 
 setStringifiedCookie('diet', exampleValue);
+
+export function stringifyCookieValue(value: FruitInDiet[]) {
+  return JSON.stringify(value);
+}
+
+export function deleteCookie(key: string) {
+  Cookies.remove(key);
+}
