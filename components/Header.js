@@ -26,6 +26,9 @@ export default function Header() {
         <Link href="/about">About </Link>
         <Link href="/math">Mathematic </Link>
         <Link href="/fruits">Fruits</Link>
+        <Link href="/api-frontend-mathematic-list">List</Link>
+        <Link href="/register">Register</Link>
+        <Link href="/login">Login</Link>
 
         {/*
           This is how Next.js used to require
